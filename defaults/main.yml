@@ -159,6 +159,7 @@ ferm__default_rules: '{{ ferm_rules_default_policy +
                         ferm_rules_filter_recent_scanners +
                         ferm_rules_filter_reject_all +
                         ferm_rules_fail2ban +
+                        ferm_rules_libvirt +
                         ferm_rules_forward }}'
 
 # Configure default policies for built-in iptables chains
@@ -355,6 +356,15 @@ ferm_rules_fail2ban:
     when: '{{ ferm_fail2ban | bool }}'
     delete: '{{ not ferm_fail2ban | bool }}'
 
+# libvirt support rules for ferm
+ferm_rules_libvirt:
+
+  - type: 'libvirt'
+    weight: 'zz'
+    comment: 'Reload libvirt rules'
+    when: '{{ ferm_libvirt | bool }}'
+    delete: '{{ not ferm_libvirt | bool }}'
+
 # Manage packet forwarding to other hosts/containers
 ferm_rules_forward:
 
@@ -418,6 +428,10 @@ ferm_host_custom_files: []
 # or turned off, nothing will happen.
 ferm_fail2ban: True
 
+# Enable or disable ``libvirt`` integration. ``ferm`` will send ``libvirt`` a reload
+# command after its own configuration is reloaded. If ``libvirt`` is not present
+# or turned off, nothing will happen.
+ferm_libvirt: True
 
 # .. envvar:: ferm__forward
 #
