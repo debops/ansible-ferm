@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+
+{% if item.comment|d() %}
+# {{ item.comment }}
+
+{% endif %}
+{% if item.when is undefined or item.when | bool %}
+@hook post "type libvirtd > /dev/null && (systemctl reload libvirtd || true) || true";
+{% else %}
+# Rule disabled by 'item.when' condition
+{% endif %}
+
